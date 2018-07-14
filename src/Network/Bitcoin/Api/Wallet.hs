@@ -111,3 +111,11 @@ sendToAddress :: T.Client
 sendToAddress client address amount =
     let configuration = [toJSON address, toJSON amount]
     in I.call client "sendtoaddress" configuration
+
+-- | Validate a specific address
+validateAddress :: T.Client
+                -> BT.Address
+                -> IO Bool
+validateAddress client address = 
+    let configuration = [toJSON address]
+    in I.call client "validateaddress" configuration
