@@ -11,6 +11,7 @@ import qualified Data.Bitcoin.Types                           as BT
 import qualified Network.Bitcoin.Api.Internal                 as I
 import qualified Network.Bitcoin.Api.Types                    as T
 import           Network.Bitcoin.Api.Types.UnspentTransaction (UnspentTransaction)
+import           Network.Bitcoin.Api.Types.ValidateAddress    (ValidateAddress)
 
 -- | Lists unspent transaction with default parameters
 listUnspent :: T.Client
@@ -115,7 +116,7 @@ sendToAddress client address amount =
 -- | Validate a specific address
 validateAddress :: T.Client
                 -> BT.Address
-                -> IO Bool
+                -> IO BT.ValidateAddress
 validateAddress client address = 
     let configuration = [toJSON address]
     in I.call client "validateaddress" configuration
