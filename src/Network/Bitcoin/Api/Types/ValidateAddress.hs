@@ -7,15 +7,7 @@ import           Control.Applicative ((<$>))
 import           Control.Lens.TH     (makeLenses)
 import           Control.Monad       (mzero)
 
-import qualified Data.Base58String   as B58S
-import           Data.Word           (Word64)
-
 import           Data.Aeson
-import           Data.Aeson.Types
-
-import qualified Data.Bitcoin.Types  as BT
-
-import qualified Data.Text           as T
 
 -- | Whether or not a bitcoin address is valid
 --
