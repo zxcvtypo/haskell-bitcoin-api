@@ -51,6 +51,12 @@ getBalance :: T.Client         -- ^ Our client context
 getBalance client =
   I.call client "getbalance" emptyArray
 
+-- | Returns the current block count
+getBlockCount :: T.Client      -- ^ Our client context
+              -> IO Integer    -- ^ Current block count
+getBlockCount client =
+  I.call client "getblockcount" emptyArray
+
 -- | Provides access to a new receiving address filed under the default account.
 --   Intended to be published to another party that wishes to send you money.
 newAddress :: T.Client         -- ^ Our client context
