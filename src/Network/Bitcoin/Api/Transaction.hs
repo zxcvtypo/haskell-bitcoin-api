@@ -57,6 +57,23 @@ create client utxs outputs =
 
   in (return . Btc.decode) =<< I.call client "createrawtransaction" configuration
 
+-- | Funds a raw transaction
+fund :: T.Client             -- ^ Our client context
+     -> Btc.Transaction      -- ^ The transaction to fund
+     -> IO (Btc.Transaction) -- ^ The funded transaction
+fund client tx = 
+  let configuration = [configTX, configOpts]
+      configTX      = toJSON (Btc.encode tx)
+      configOpts    = object [] 
+
+      extractTransaction res =
+        maybe
+          (error "Incorrect JSON response")
+          Btc.decode
+          (res ^? key "hex" . _JSON)
+  in do
+    res <- I.call client "fundrawtransaction" configuration
+    return (extractTransaction res)
 
 -- | Signs a raw transaction with configurable parameters.
 sign :: T.Client                   -- ^ Our client context
@@ -109,7 +126,6 @@ send :: T.Client
      -> IO BT.TransactionId
 send client tx =
   let configuration = [toJSON (Btc.encode tx)]
-
   in I.call client "sendrawtransaction" configuration
 
 -- | Returns a list of transactions that occured since a certain block height.
