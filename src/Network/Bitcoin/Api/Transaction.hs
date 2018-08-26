@@ -72,7 +72,7 @@ fund client tx =
           Btc.decode
           (res ^? key "hex" . _JSON)
   in do
-    res <- I.call client "fundrawtransaction" configuration
+    res <- I.call client "fundrawtransaction" configuration :: IO Value
     return (extractTransaction res)
 
 -- | Signs a raw transaction with configurable parameters.
