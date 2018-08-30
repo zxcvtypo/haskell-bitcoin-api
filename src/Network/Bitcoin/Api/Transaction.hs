@@ -65,7 +65,7 @@ createV :: T.Client               -- ^ The client session we are using
                                   --   of bitcoins to send.
        -> IO Btc.Transaction
 createV client utx voutN (addr, btc) =
-  let configuration = [toJSON (object [(txToOutpoint utx)]), object [(B58S.toText addr, toJSON btc)]]
+  let configuration = [toJSON ([(txToOutpoint utx)]), object [(B58S.toText addr, toJSON btc)]]
 
       txToOutpoint tx = object [
         ("txid", toJSON (utx ^. transactionId)),
