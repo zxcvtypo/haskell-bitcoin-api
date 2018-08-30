@@ -57,6 +57,26 @@ create client utxs outputs =
 
   in (return . Btc.decode) =<< I.call client "createrawtransaction" configuration
 
+createV :: T.Client               -- ^ The client session we are using
+        -> UnspentTransaction     -- ^ The input we are using for this transaction
+        -> Integer                -- ^ The vout number we are using for this transaction
+        -> (BT.Address, BT.Btc)   -- ^ A key/value pair which associates a
+                                  --   destination address with a specific amount
+                                  --   of bitcoins to send.
+       -> IO Btc.Transaction
+createV client utx voutN (addr, btc) =
+  let configuration = [toJSON (txToOutpoint utx), object [B58S.toText addr, toJSON btc]]
+
+      txToOutpoint tx = object [
+        ("txid", toJSON (utx)),
+        ("vout", toJSON (voutN))]
+
+      outToAddress (addr, btc) = (B58S.toText addr, toJSON btc)
+
+  in (return . Btc.decode) =<< I.call client "createrawtransaction" configuration
+
+
+
 -- | Funds a raw transaction
 fund :: T.Client             -- ^ Our client context
      -> Btc.Transaction      -- ^ The transaction to fund
