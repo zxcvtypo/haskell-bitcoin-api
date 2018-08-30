@@ -68,7 +68,7 @@ createV client utx voutN (addr, btc) =
   let configuration = [toJSON (txToOutpoint utx), object [(B58S.toText addr, toJSON btc)]]
 
       txToOutpoint tx = object [
-        ("txid", toJSON (utx)),
+        ("txid", toJSON (utx ^. transactionId)),
         ("vout", toJSON (voutN))]
 
       outToAddress (addr, btc) = (B58S.toText addr, toJSON btc)
