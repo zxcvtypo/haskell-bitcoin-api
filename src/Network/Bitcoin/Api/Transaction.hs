@@ -60,7 +60,7 @@ create client utxs outputs =
 
 createData :: T.Client               -- ^ The client session we are using
            -> [UnspentTransaction]   -- ^ The inputs we are using for this transaction
-           -> [B.ByteString]         -- ^ The data to include into OP_RETURN
+           -> [String]               -- ^ The data to include into OP_RETURN
                                      --   Make sure your mining pool supports the 
                                      --   OP_RETURN transaction size and amounts
                                      --   before calling this function, otherwise
@@ -75,13 +75,9 @@ createData client utxs message =
         ("vout", toJSON (tx ^. vout))]
 
       outMessage m = object [
-        ("data", toJSON (bytestringToHexString m))]
+        ("data", toJSON m)]
 
   in (return . Btc.decode) =<< I.call client "createrawtransaction" configuration
-
-
-bytestringToHexString :: B.ByteString -> String
-bytestringToHexString b = undefined
 
 
 createV :: T.Client               -- ^ The client session we are using
