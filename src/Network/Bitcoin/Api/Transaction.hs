@@ -16,6 +16,7 @@ import           Control.Lens                                 ((^.), (^?))
 import qualified Data.Base58String                            as B58S
 import qualified Data.Bitcoin.Block                           as Btc hiding (encode, decode)
 import qualified Data.Bitcoin.Transaction                     as Btc
+import qualified Data.ByteString                              as B
 
 import qualified Data.Bitcoin.Types                           as BT
 import qualified Network.Bitcoin.Api.Blockchain               as Blockchain
