@@ -68,7 +68,7 @@ createData :: T.Client               -- ^ The client session we are using
                                      --   transaction.
            -> IO Btc.Transaction
 createData client utxs message =
-  let configuration = [toJSON (map txToOutpoint utxs), object (map outMessage message)]
+  let configuration = [toJSON (map txToOutpoint utxs), toJSON (map outMessage message)]
 
       txToOutpoint tx = object [
         ("txid", toJSON (tx ^. transactionId)),
