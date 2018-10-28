@@ -57,6 +57,30 @@ create client utxs outputs =
 
   in (return . Btc.decode) =<< I.call client "createrawtransaction" configuration
 
+createData :: T.Client               -- ^ The client session we are using
+           -> [UnspentTransaction]   -- ^ The inputs we are using for this transaction
+           -> [B.ByteString]         -- ^ The data to include into OP_RETURN
+                                     --   Make sure your mining pool supports the 
+                                     --   OP_RETURN transaction size and amounts
+                                     --   before calling this function, otherwise
+                                     --   the mining pool will not likely mine your 
+                                     --   transaction.
+           -> IO Btc.Transaction
+createData client utxs message =
+  let configuration = [toJSON (map txToOutpoint utxs), object (map outMessage message)]
+
+      txToOutpoint tx = object [
+        ("txid", toJSON (tx ^. transactionId)),
+        ("vout", toJSON (tx ^. vout))]
+
+      outMessage m = object [
+        ("data", toJSON (m))]
+
+  in (return . Btc.decode) =<< I.call client "createrawtransaction" configuration
+
+
+
+
 createV :: T.Client               -- ^ The client session we are using
         -> UnspentTransaction     -- ^ The input we are using for this transaction
         -> Integer                -- ^ The vout number we are using for this transaction
