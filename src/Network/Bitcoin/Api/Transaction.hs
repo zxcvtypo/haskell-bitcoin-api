@@ -75,11 +75,13 @@ createData client utxs message =
         ("vout", toJSON (tx ^. vout))]
 
       outMessage m = object [
-        ("data", toJSON (m))]
+        ("data", toJSON (bytestringToHexString m))]
 
   in (return . Btc.decode) =<< I.call client "createrawtransaction" configuration
 
 
+bytestringToHexString :: B.ByteString -> String
+bytestringToHexString b = undefined
 
 
 createV :: T.Client               -- ^ The client session we are using
