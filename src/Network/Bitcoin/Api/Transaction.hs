@@ -101,9 +101,9 @@ createV client utx voutN (addr, btc) =
 
 
 -- | Funds a raw transaction
-fund :: T.Client             -- ^ Our client context
-     -> Btc.Transaction      -- ^ The transaction to fund
-     -> IO (Btc.Transaction) -- ^ The funded transaction
+fund :: T.Client                     -- ^ Our client context
+     -> Btc.Transaction              -- ^ The transaction to fund
+     -> IO (Btc.Transaction, BT.Btc) -- ^ The funded transaction
 fund client tx = 
   let configuration = [configTX, configOpts]
       configTX      = toJSON (Btc.encode tx)
@@ -114,9 +114,15 @@ fund client tx =
           (error "Incorrect JSON response")
           Btc.decode
           (res ^? key "hex" . _JSON)
+      extractFee res =
+        maybe
+          (error "Incorrect JSON response")
+          Btc.decode
+          (res ^? key "fee" . _JSON)
+
   in do
     res <- I.call client "fundrawtransaction" configuration :: IO Value
-    return (extractTransaction res)
+    return (extractTransaction res, extractFee res)
 
 -- | Signs a raw transaction with configurable parameters.
 sign :: T.Client                   -- ^ Our client context
