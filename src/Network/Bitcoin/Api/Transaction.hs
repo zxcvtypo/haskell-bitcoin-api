@@ -115,9 +115,8 @@ fund client tx =
           Btc.decode
           (res ^? key "hex" . _JSON)
       extractFee res =
-        maybe
+        frormMaybe
           (error "Incorrect JSON response")
-          Btc.decode
           (res ^? key "fee" . _JSON)
 
   in do
