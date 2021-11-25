@@ -72,6 +72,16 @@ newAddressWith :: T.Client      -- ^ Our client context
 newAddressWith client account =
   let configuration = [account]
   in I.call client "getnewaddress" configuration
+  
+-- | Provides access to a new receiving address with a label
+--   Creates a legacy address
+--   Intended to be published to another party that wishes to send you money.
+newLegacyAddressWith :: T.Client      -- ^ Our client context
+                     -> String        -- ^ The label for the address
+                     -> IO BT.Address -- ^ The address created
+newLegacyAddressWith client label =
+  let configuration = [toJSON label, toJSON ("legacy" :: String)]
+  in I.call client "getnewaddress" configuration
 
 -- | Provides access to a new change address, which will not appear in the UI.
 --   This is to be used with raw transactions only.
